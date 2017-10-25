@@ -1,0 +1,3 @@
+[submodule "exercises/game-of-life/skotniczny"]
+	path = exercises/game-of-life/skotniczny
+	url = git@github.com:ULL-ESIT-MII-CA-1718/game-of-life.git
