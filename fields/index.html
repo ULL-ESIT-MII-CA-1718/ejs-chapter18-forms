@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <form action="/" method="POST">
+      
+      <p>Name (the length of the name will be updated): <input type="text" value="abc" name="name" autofocus> length:<span id="length">0</span> (text input)</p>
+      <!-- 
+        The name attribute of a form field determines the way its value
+        will be identified when the form is submitted. 
+      -->
+      <p>Password: <input type="password" value="123" name="password"> (password input)</p>
+      <p>Disabled: <input type="text" disabled value="You can not write here"></p>
+
+      <p>
+          The <b>&lt;label&gt;</b> tag is used to associate a piece of
+          text with an input field. <br/>
+          Its <b>for</b> attribute should refer to the id of the field. <br/>
+          Clicking the label will activate
+          the field, which focuses it and toggles its value when
+          it is a checkbox or radio button.<br/>
+          <label for="cb">
+            Will attend:
+            <input type="checkbox" name="attend" id="cb" checked> (checkbox)
+          </label>
+      </p>
+
+      <p>
+        A radio button is similar to a checkbox, but it’s implicitly linked
+        to other radio buttons with the same name attribute so that only
+        one of them can be active at any time.
+      </p>
+      <p>Your choice: 
+         <input type="radio" value="lightgreen" name="choice"> Green
+         <input type="radio" value="lightblue" name="choice"> Blue
+         <input type="radio" value="" name="choice" checked> White (example of input radio)</p>
+      <p><input type="file"file> (file)</p>
+
+      <p>Description (test: select a word inside the textarea and press F2. See what happens):<br/>
+        <textarea name="description" rows=4 cols="50">
+          one
+          two
+          three
+        </textarea>
+      </p>
+
+      <p> Your desserts:
+        <select multiple name="desserts">
+          <option>Pancakes</option>
+          <option>Pudding</option>
+          <option>Ice cream</option>
+        </select>
+    </p>
+    <p>
+       <input type="submit" value="Submit">
+    </p>
+  </form>
+  <script type="text/javascript">
+   /*
+      The name attribute can be used
+      as a property name when accessing the form’s elements property,
+      which acts both as an array-like object (accessible by number) and
+      a map (accessible by name).
+    */
+    let form = document.querySelector('form');
+    console.log(form.elements[1].type); // → password
+    console.log(form.elements.password.type); // → password
+    /* 
+      When a field is contained in a <form> element, its DOM element
+      will have a property form linking back to the form’s DOM
+      element. The <form> element, in turn, has a property called
+      "elements" that contains an array-like collection of the fields
+      inside it.
+    */
+    console.log(form.elements.name.form == form); // → true
+  </script>
+
+  <script>
+    var textarea = document.querySelector("textarea");
+    textarea.addEventListener("keydown", function(event) {
+      // The key code for F2 happens to be 113
+      if (event.keyCode == 113) {
+        replaceSelection(textarea, "Khasekhemwy");
+        event.preventDefault();
+      }
+    });
+    function replaceSelection(field, word) {
+      var from = field.selectionStart, to = field.selectionEnd;
+      field.value = field.value.slice(0, from) + word +
+                    field.value.slice(to);
+      // Put the cursor after the word
+      field.selectionStart = field.selectionEnd =
+        from + word.length;
+    }
+  </script>
+
+  <script>
+    var text = document.querySelector("input");
+    var output = document.querySelector("#length");
+    text.addEventListener("input", function() {
+      output.textContent = text.value.length;
+    });
+  </script>
+
+  <script>
+    /*
+    The document.getElementsByName method gives us all elements with a
+    given name attribute. 
+    */
+    var buttons = document.getElementsByName("choice");
+    function setColor(event) {
+      /* 
+         Remember that event objects have a target property referring to the element
+      that triggered the event. This is often useful in event handlers
+      like this one, which will be called on different elements and need
+      some way to access the current target.
+      */
+      document.body.style.background = event.target.value;
+    }
+    /* 
+       The example loops over those (with a regular
+      for loop, not forEach, because the returned collection is not a
+      real array)
+    */
+    for (var i = 0; i < buttons.length; i++)
+      /*  and registers an event handler for each element.  */
+      buttons[i].addEventListener("change", setColor);
+  </script>
+
+  <script type="text/javascript">
+    /*
+      Submitting a form normally means that the browser navigates to the
+      page indicated by the form’s action attribute, using either a GET
+      or a POST request. 
+                  <form action="/" method="POST"> ...
+      But before that happens, a "submit" event is
+      fired. This event can be handled by JavaScript, and the handler can
+      prevent the default behavior by calling preventDefault on the event
+      object.
+    */
+    /* 
+      When a program is in the process of handling an action caused by
+      some button or other control, which might require communication
+      with the server and thus take a while, it can be a good idea to
+      disable the control until the action finishes. That way, when the
+      user gets impatient and clicks it again, they don’t accidentally
+      repeat their action.
+
+      While JavaScript solutions can disable the submit button after
+      it has been clicked, this will have no effect on those people
+      who have JavaScript disabled.
+    */
+    let submitBut = document.querySelector('input[type="submit"]');
+    form.addEventListener("submit", (e) => {
+      submitBut.disabled =  true;
+      /* 
+         The handler can prevent the default behavior by calling
+         preventDefault on the event
+         object.
+      */
+      // e.preventDefault();
+    });
+  </script>
+
+</body>
+</html>
