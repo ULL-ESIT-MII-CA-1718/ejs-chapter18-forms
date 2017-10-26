@@ -11,14 +11,29 @@ const waitASecond = function(f) {
 };
 
 const bodyParser = require("body-parser");
+const fileUpload = require('express-fileupload');
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(fileUpload());
 
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname));
 
+
 app.post("/", (req, resp) => {
+	const getFile = function() {
+    if (!req.files) return "No files were uploaded";
+    console.log("req.files = \n"+util.inspect(req.files));
+    let sampleFile = req.files.somefile;
+    sampleFile.mv(__dirname+'/trash/'+req.files.somefile.name, function(err) {
+        if (err) return "Error: "+err;
+      });
+    return 'File uploaded!';
+  };
+
   console.log(req.body);
   waitASecond(function() { /* Let's simulate a slow network */
     resp.send(`
@@ -34,6 +49,7 @@ app.post("/", (req, resp) => {
         req.body = 
         ${util.inspect(req.body)}
        </pre>
+       The file on the server side: ${getFile()}
       `);
 	});
 });
