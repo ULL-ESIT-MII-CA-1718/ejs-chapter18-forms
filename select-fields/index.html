@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
+  <style type="text/css">
+  </style>
 </head>
 <body>
+  <h2>Binary Calculator</h2>
   <select multiple size="5">
-    <option value="1">1:   0001</option>
-    <option value="2">2:   0010</option>
-    <option value="4">4:   0100</option>
-    <option value="8">8:   1000</option>
-    <option value="16">16: 10000</option>
+    <option value="1" label="1">1</option>
   </select> 
   = <b>
       <span id="output">0 </span>
@@ -18,6 +17,15 @@
 
   <script>
     var select = document.querySelector("select");
+    for(var i = 2; i <=20; i++) {
+      var opt = document.createElement("option");
+      opt.value = 2*(1 << i);
+      // See https://stackoverflow.com/questions/9939760/how-do-i-convert-an-integer-to-binary-in-javascript
+      opt.text = opt.value+":  "+(opt.value >>> 0).toString(2);
+      select.appendChild(opt);
+    }
+    select.size = select.options.length;
+    
     var output = document.querySelector("#output");
 
     select.addEventListener("change", function() {
