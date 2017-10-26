@@ -6,18 +6,6 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-const waitASecond = function(f) {
-    setTimeout(f, 1000);
-};
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-// set the view engine to ejs
-app.set('view engine', 'ejs'); // http://expressjs.com/api.html#app.set
-
-var expressLayouts = require('express-ejs-layouts');
-app.set('layout', 'layout'); // defaults to 'layout'  '
-
 const bodyParser = require("body-parser");
 const fileUpload = require('express-fileupload');
 
@@ -29,7 +17,6 @@ app.use(fileUpload());
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname));
-app.use(expressLayouts);
 
 
 app.post("/", (req, resp) => {
@@ -46,15 +33,12 @@ app.post("/", (req, resp) => {
   };
 
   console.log(req.body);
-  waitASecond(function() { /* Let's simulate a slow network */
-		resp.render('result', 
+  resp.send(
       {
-        title: "Result", 
         reqbody: util.inspect(req.body), 
         fileInfo: getFile()
       }
     );
-	});
 });
 
 app.listen(app.get('port'), () => {
