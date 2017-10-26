@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+   <p>
+   The <tt>files</tt> property of a file field element is an array-like
+    object (again, not a real array) containing the files chosen
+    in the field. <br/>
+    It is initially empty. The reason there isn’t
+    simply a file property is that file fields also support a
+    <tt>multiple</tt> attribute, which makes it possible to select multiple
+    files at the same time.
+  </p>
+   <input type="file" multiple>
+  <script>
+    var input = document.querySelector("input");
+    input.addEventListener("change", function() {
+      Array.prototype.forEach.call(input.files, function(file) {
+        // Reading a file is done by creating a FileReader object
+        var reader = new FileReader();
+
+        // registering a "load" event handler for the FileReader
+        reader.addEventListener("load", function() {
+          /* 
+             Objects in the files property have properties such as 
+               name (the filename), 
+               size (the file’s size in bytes), and 
+               type (the media type of the file, such as text/plain or image/jpeg).
+           */
+          console.log("File", file.name, "starts with",
+                      reader.result.slice(0, 20));
+        });
+        reader.readAsText(file);
+      });
+    });
+  </script> 
+</body>
+</html>
