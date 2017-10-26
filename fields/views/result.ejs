@@ -1,0 +1,16 @@
+Response from server: <b>Hello dear client!</b><br/>
+<p>
+The <b>name</b> attribute of a form field determines the way its value
+will be identified in the server when the request from the form arrives. </br>
+<b>req.body</b> is an object containing the values of the attributes 
+sumitted.
+</p>
+Here is how your form has arrived to me:<br/>
+<pre>
+req.body = 
+<%= reqbody %>
+</pre>
+The file on the server side: 
+<pre>
+<%= fileInfo %>
+</pre>

@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/ULL-ESIT-MII-CA-1718/ejs-chapter18-forms#readme",
   "dependencies": {
+    "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "express-ejs-layouts": "^2.3.1",
     "express-fileupload": "^0.3.0"
   }
 }

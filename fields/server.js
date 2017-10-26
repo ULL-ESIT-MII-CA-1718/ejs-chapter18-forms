@@ -10,6 +10,14 @@ const waitASecond = function(f) {
     setTimeout(f, 1000);
 };
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+// set the view engine to ejs
+app.set('view engine', 'ejs'); // http://expressjs.com/api.html#app.set
+
+var expressLayouts = require('express-ejs-layouts');
+app.set('layout', 'layout'); // defaults to 'layout'  '
+
 const bodyParser = require("body-parser");
 const fileUpload = require('express-fileupload');
 
@@ -21,36 +29,31 @@ app.use(fileUpload());
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname));
+app.use(expressLayouts);
 
 
 app.post("/", (req, resp) => {
+  // See https://www.npmjs.com/package/express-fileupload
 	const getFile = function() {
-    if (!req.files) return "No files were uploaded";
+    if (!req.files || Object.keys(req.files).length === 0) return "No files were uploaded";
     console.log("req.files = \n"+util.inspect(req.files));
+
     let sampleFile = req.files.somefile;
     sampleFile.mv(__dirname+'/trash/'+req.files.somefile.name, function(err) {
         if (err) return "Error: "+err;
       });
-    return 'File uploaded!';
+    return 'File uploaded!\n'+util.inspect(req.files);
   };
 
   console.log(req.body);
   waitASecond(function() { /* Let's simulate a slow network */
-    resp.send(`
-        Response from server: <b>Hello dear client!</b><br/>
-        <p>
-        The <b>name</b> attribute of a form field determines the way its value
-        will be identified in the server when the request from the form arrives. </br>
-        <b>req.body</b> is an object containing the values of the attributes 
-        sumitted.
-        </p>
-        Here is how your form has arrived to me:<br/>
-        <pre>
-        req.body = 
-        ${util.inspect(req.body)}
-       </pre>
-       The file on the server side: ${getFile()}
-      `);
+		resp.render('result', 
+      {
+        title: "Result", 
+        reqbody: util.inspect(req.body), 
+        fileInfo: getFile()
+      }
+    );
 	});
 });
 
