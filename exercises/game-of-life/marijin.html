@@ -5,8 +5,6 @@
   <title></title>
 </head>
 <body>
-  <script src="code/promise.js"></script>
-
   <div id="grid"></div>
   <button id="next">Next generation</button>
   <button id="run">Auto run</button>
@@ -64,11 +62,11 @@
         for (var x = 0; x < width; x++) {
           var neighbors = countNeighbors(grid, x, y);
           var offset = x + y * width;
-          if (neighbors < 2 || neighbors > 3)
+          if (neighbors < 2 || neighbors > 3) // Any live cell with fewer than two or more than three live neighbors dies
             newGrid[offset] = false;
-          else if (neighbors == 2)
+          else if (neighbors == 2)  // Any live cell with two live neighbors lives on to the next generation.
             newGrid[offset] = grid[offset];
-          else
+          else // Any cell with exactly three live neighbors becomes a live cell.
             newGrid[offset] = true;
         }
       }
