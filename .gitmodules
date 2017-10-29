@@ -1,3 +1,6 @@
 [submodule "exercises/game-of-life/skotniczny"]
 	path = exercises/game-of-life/skotniczny
 	url = git@github.com:ULL-ESIT-MII-CA-1718/game-of-life.git
+[submodule "storing-data-client-side/web-storage-example"]
+	path = storing-data-client-side/web-storage-example
+	url = git@github.com:crguezl/web-storage-example.git
