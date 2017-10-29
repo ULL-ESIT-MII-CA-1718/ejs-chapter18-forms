@@ -5,55 +5,60 @@
   <title></title>
 </head>
 <body>
-	<input type="text" id="field">
-	<div id="suggestions" style="cursor: pointer"></div>
+  <input type="text" id="field">
+  <div id="suggestions" style="cursor: pointer"></div>
 
-	<script>
+  <script>
     // https://github.com/rarafon/Javascript/blob/master/Eloquent-JS/chapter%2018/Autocompletion
-		// Builds up an array with global variable names, like
-		// 'alert', 'document', and 'scrollTo'
-		var terms = [];
-		for (var name in window)
-			terms.push(name);
+    // Builds up an array with global variable names, like
+    // 'alert', 'document', and 'scrollTo'
+    var terms = [];
+    for (var name in window)
+      terms.push(name);
 
-		var inputs = document.getElementById("field");
-		var suggestions = document.getElementById("suggestions");
-		
-		function handler(e) {
-			inputs.value = e.target.textContent;
-			addSuggestion([]);
-		}
-		
-		function addSuggestion(texts) {
-			var superDiv = document.createElement("div");
-			texts.forEach(function(text) {
-				var div = document.createElement("div");
-				div.textContent = text;
-				superDiv.appendChild(div);
-			});
-			superDiv.addEventListener("click", handler);
-			if (suggestions.firstChild) {
-				suggestions.firstChild.removeEventListener("click", handler);
-				suggestions.replaceChild(superDiv, suggestions.firstChild);  
-			} else {
-				suggestions.appendChild(superDiv);  
-			}
-		}
-		inputs.addEventListener("input", function(e){
-			var text = e.target.value;
-			if (text === "") {
-				addSuggestion([]);
-				return;
-			}
-			var reg = new RegExp("^" + text + ".*", "i");
-			var array = [];
-			terms.forEach(function(term){
-				if (reg.test(term))
-					array.push(term);
-			});
-			addSuggestion(array);
-			
-		})
-	</script>  
+    var inputs = document.getElementById("field");
+    var suggestions = document.getElementById("suggestions");
+    
+    function handler(e) {
+      inputs.value = e.target.textContent;
+      addSuggestion([]); // clear suggestions
+    }
+    
+    function addSuggestion(texts) {
+      var superDiv = document.createElement("div");
+      texts.forEach(function(text) {
+        var div = document.createElement("div");
+        div.textContent = text;
+        superDiv.appendChild(div);
+      });
+      superDiv.addEventListener("click", handler);
+      if (suggestions.firstChild) { // Already appended
+        suggestions.firstChild.removeEventListener("click", handler);
+        suggestions.replaceChild(superDiv, suggestions.firstChild);  
+      } else { // First time
+        suggestions.appendChild(superDiv);  
+      }
+    }
+
+    /* 
+       The DOM input event is fired synchronously when the value
+       of an <input>, <select>, or <textarea> element is changed.
+    */
+    inputs.addEventListener("input", function(e){
+      var text = e.target.value;
+      if (text === "") {
+        addSuggestion([]);
+        return;
+      }
+      var reg = new RegExp("^" + text + ".*", "i");
+      var array = [];
+      terms.forEach(function(term){
+        if (reg.test(term))
+          array.push(term);
+      });
+      addSuggestion(array);
+      
+    })
+  </script>  
 </body>
 </html>
